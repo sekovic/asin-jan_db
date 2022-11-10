@@ -1,7 +1,17 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from SPAPI import getDictFromAPI,extractData
-from database.ItemsData import put_new_no, put_items,test_db
+from ItemsData import put_new_no, put_items,test_db,test_fetch,test_no_put
+
+from deta import Deta  # Import Deta
+deta = Deta("c0j0yuic_Gm7mjVA9U149xt8KRyLrfJwsiDyxbPXS")
+
+#def get_maxno_dataset_by_user(user_id)
+
+# This how to connect to or create a database.
+dataset_db = deta.Base("dataset_db")
+items_db = deta.Base("items_db")
+db = deta.Base("simple_db")
 
 class Item(BaseModel):
     user_id: str
@@ -11,12 +21,17 @@ class Item(BaseModel):
 
 app = FastAPI()
 
+
 @app.post("/item/")
 async def get_items(item: Item):
     user_id=item.user_id
     code_type=item.code_type
     refresh_token = item.refresh_token
     input_codes_str=item.codes
+
+#    db.put({"name": "alex", "age": 77})
+#    res = dataset_db.fetch({"user_id": "a"})
+
 
     res=getDictFromAPI(code_type,input_codes_str, refresh_token)
     data_dict=extractData(res)    

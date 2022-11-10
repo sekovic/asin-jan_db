@@ -16,9 +16,18 @@ db.put({"no":2,"user_id":"b","date_reg":"2022/11/2","state":"1"})
 db.put({"no":3,"user_id":"c","date_reg":"2022/11/3","state":"1"})
 db.put({"no":4,"user_id":"D","date_reg":"2022/11/4","state":"1"})
 '''
+def test_fetch(key):
+    res = dataset_db.fetch({"user_id": key})
+    all_items = res.items
+    print("#(test) all_items:"+str(all_items))
+    #return all_items
+
+def test_no_put(key):
+    test_fetch(key)
 
 
 def put_new_no(user_id: str):
+
     no=get_maxno_by_userid(user_id)
     d=datetime.datetime.now()
     print(d.strftime('%Y/%m/%d %H:%M:%S'))
@@ -26,11 +35,15 @@ def put_new_no(user_id: str):
     return no
 
 def get_maxno_by_userid(user_id: str):
+
+    test_no_put(user_id)
+    
     
     try:
-        res = dataset_db.fetch()
-        all_items = res.items
-        #res = dataset_db.fetch({"user_id":str(user_id)})
+#        res = dataset_db.fetch({"user_id":str(user_id)})
+#        res = dataset_db.fetch({"user_id": "a"})
+        res = dataset_db.fetch({"user_id": user_id})
+#        all_items=test_no_put(user_id)
         print("success:dataset_db.fetch user_id:"+user_id)
     except:
         print("error: dataset_db.fetch user_id;"+user_id)
@@ -38,8 +51,7 @@ def get_maxno_by_userid(user_id: str):
 
     if not res is None:
         try:
-            print("res.len:"+str(res.len()))
-            #all_items = res.items
+            all_items = res.items
             print("all_items:"+str(all_items))
         except:
             print("all_items = res.items error:")
@@ -47,9 +59,10 @@ def get_maxno_by_userid(user_id: str):
         
         try:
             print("try")
-            max_item=max(all_items, key=lambda x: x["no"])
-            print ("max_item['no']:"+max_item['no'])
-            return max_item['no']+1
+            max_item = max(all_items, key=lambda x: x['no'])
+            print("max_item:"+ str(max_item))
+            print ("max_item['no']:"+str(max_item['no']))
+            return int(max_item['no'])+1
         except ValueError:
             print("000")
             return 1
