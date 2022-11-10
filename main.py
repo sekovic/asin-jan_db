@@ -58,7 +58,7 @@ def split_codes(user_id: str, code_type: str, refresh_token: str, codes: str):
     for i in codes_list:
         #print(codes_list[n:n+s:1])
 
-        no=put_new_no(user_id)
+        no=put_new_no(str(user_id))
         #no=1
 #        print("no=" + str(no))
 

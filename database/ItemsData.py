@@ -16,42 +16,49 @@ db.put({"no":2,"user_id":"b","date_reg":"2022/11/2","state":"1"})
 db.put({"no":3,"user_id":"c","date_reg":"2022/11/3","state":"1"})
 db.put({"no":4,"user_id":"D","date_reg":"2022/11/4","state":"1"})
 '''
-def put_items(no, items):
-    items_db.put({"no":no,"items":items})
 
 
-
-def put_new_no(user_id):
-    print("put_new_no:"+user_id)
+def put_new_no(user_id: str):
     no=get_maxno_by_userid(user_id)
-    #print(no)
     d=datetime.datetime.now()
     print(d.strftime('%Y/%m/%d %H:%M:%S'))
     dataset_db.put({"no":no,"user_id":user_id,"date_reg":d.strftime('%Y/%m/%d %H:%M:%S'),"state":0})
     return no
 
-def get_maxno_by_userid(user_id):
-    print("get_maxno_by_userid")
-    try:
-        res = dataset_db.fetch({"user_id":user_id})
-    except:
-        print("error: dataset_db.fetch")
-        return 1
+def get_maxno_by_userid(user_id: str):
     
-    print("all_items")
-    if not res is None:
+    try:
+        res = dataset_db.fetch()
         all_items = res.items
+        #res = dataset_db.fetch({"user_id":str(user_id)})
+        print("success:dataset_db.fetch user_id:"+user_id)
+    except:
+        print("error: dataset_db.fetch user_id;"+user_id)
+        return 1
+
+    if not res is None:
+        try:
+            print("res.len:"+str(res.len()))
+            #all_items = res.items
+            print("all_items:"+str(all_items))
+        except:
+            print("all_items = res.items error:")
+            return 100
+        
         try:
             print("try")
             max_item=max(all_items, key=lambda x: x["no"])
-            return max_item['no']+1
             print ("max_item['no']:"+max_item['no'])
+            return max_item['no']+1
         except ValueError:
             print("000")
             return 1
     #return max_item['no']
     else:
         return 1
+
+def put_items(no, items_):
+    items_db.put({"no":no,"items":items_})
 
         
 '''
@@ -65,8 +72,8 @@ def test_db():
     return 'test_db'
 
 def main():
-    items=None
-    put_items("a",items)
+#    items=None
+    print("a")
 
 if __name__ == "__main__": 
     main()
